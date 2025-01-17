@@ -1,0 +1,120 @@
+# Overview
+
+In this project, I created a Command Line Interface (CLI) calculator to demonstrate the capabilities of the Rust programming language. This project aims to enhance my understanding of Rust by building a practical application that showcases the language's syntax, memory safety, and error handling features.
+
+The software performs basic arithmetic operations such as addition, subtraction, multiplication, and division. It provides a simple user interface where users can select operations and input numbers, receiving immediate feedback with the calculated result.
+
+The purpose of this software is to solidify my understanding of Rust's syntax and core concepts, including variable handling, control flow, and functions. By implementing this project, I have gained hands-on experience with Rust's unique features like ownership and type safety, which are essential for efficient and safe programming.
+
+[Software Demo Video](http://youtube.link.goes.here)
+
+# Development Environment
+
+To develop this software, I used the following tools and environment:
+
+- **IDE**: Visual Studio Code
+- **Rust Version**: 1.70.0
+- **Cargo**: Rust's package manager and build system for project management
+
+The project is written entirely in Rust without any external libraries, utilizing Rust's standard library for I/O operations and basic functionalities.
+
+# Useful Websites
+
+Here are some websites that were helpful during this project:
+
+- [The Rust Programming Language Book](https://doc.rust-lang.org/book/)
+- [Rust Standard Library Documentation](https://doc.rust-lang.org/std/)
+- [Rust by Example](https://doc.rust-lang.org/rust-by-example/)
+
+# Future Work
+
+There are several improvements and additions planned for future versions of this project:
+
+- **Implement Advanced Operations**: Add support for more complex mathematical functions such as exponentiation, square roots, and trigonometric operations.
+- **Error Handling Improvements**: Enhance the error handling to provide more detailed feedback to users, such as handling invalid inputs more gracefully.
+- **User Interface Enhancements**: Improve the user interface with a more user-friendly design, possibly incorporating a GUI version.
+
+- **Unit Testing**: Implement comprehensive unit tests to ensure the reliability and accuracy of all operations.
+
+---
+
+Here is the Rust code for the CLI calculator:
+
+```rust
+use std::io;
+
+fn main() {
+    println!("Welcome to the Rust CLI Calculator!");
+    loop {
+        println!("\nChoose an operation:");
+        println!("1) Addition");
+        println!("2) Subtraction");
+        println!("3) Multiplication");
+        println!("4) Division");
+        println!("5) Exit");
+
+        let mut choice = String::new();
+        io::stdin().read_line(&mut choice).expect("Failed to read line");
+
+        let choice: u32 = match choice.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Please enter a valid number.");
+                continue;
+            }
+        };
+
+        if choice == 5 {
+            println!("Exiting the calculator. Goodbye!");
+            break;
+        }
+
+        let (num1, num2) = get_two_numbers();
+        let result = match choice {
+            1 => num1 + num2,
+            2 => num1 - num2,
+            3 => num1 * num2,
+            4 => {
+                if num2 == 0.0 {
+                    println!("Error: Division by zero is not allowed.");
+                    continue;
+                } else {
+                    num1 / num2
+                }
+            }
+            _ => {
+                println!("Invalid choice. Please select a valid option.");
+                continue;
+            }
+        };
+
+        println!("The result is: {}", result);
+    }
+}
+
+fn get_two_numbers() -> (f64, f64) {
+    let mut num1 = String::new();
+    let mut num2 = String::new();
+
+    println!("Enter the first number:");
+    io::stdin().read_line(&mut num1).expect("Failed to read line");
+    let num1: f64 = match num1.trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("Please enter a valid number.");
+            return get_two_numbers();
+        }
+    };
+
+    println!("Enter the second number:");
+    io::stdin().read_line(&mut num2).expect("Failed to read line");
+    let num2: f64 = match num2.trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("Please enter a valid number.");
+            return get_two_numbers();
+        }
+    };
+
+    (num1, num2)
+}
